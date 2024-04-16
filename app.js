@@ -64,8 +64,8 @@ app.get("/search", async (req, res) => {
   // MaxResults : 1이상 100이하 양의정수 기본값10  //검색결과 한페이지당 최대 출력개수
   // CategoryId : 양의정수 - 분야의 고유 번호(기본값:0, 전체) (참고 : 알라딘 모든 분야 카테고리) 특정 분야로 검색결과를 제한함
   app.get("/ItemList", async (req, res) => {
-    const {listType,start, maxResults, categoryId} = req.query;    
-    const aladinApiUrl = `${aladinApiBaseUrl}ItemList.aspx?ttbkey=${aladinApiKey}&QueryType=${listType}&MaxResults=${maxResults}&start=${start}&SearchTarget=Book&output=js&Cover=Big&CategoryId=${categoryId}&Version=20131101`;
+    const {listType,start, maxResults, categoryId} = req.query;            
+    const aladinApiUrl = `${aladinApiBaseUrl}ItemList.aspx?ttbkey=${aladinApiKey}&QueryType=${listType}&MaxResults=${maxResults}&start=${start}&SearchTarget=Book&output=js&Cover=Big&CategoryId=${categoryId}&Version=20131101&OptResult=ebookList,usedList`; 
       
     try {
       const data = await fetchData(aladinApiUrl);
@@ -80,8 +80,8 @@ app.get("/search", async (req, res) => {
 //ItemLookUp.aspx
 //isbn : 상품을 구분짓는 유일한 값 (필수값)
 app.get("/detail", async (req, res) => {
-  const {isbn} = req.query;  
-  const  aladinApiUrl = `${aladinApiBaseUrl}ItemLookUp.aspx?ttbkey=${aladinApiKey}&itemIdType=ISBN&ItemId=${isbn}&output=js&Cover=Big&Version=20131101&OptResult=ebookList,usedList,reviewList`;
+  const {isbn} = req.query;    
+  const  aladinApiUrl = `${aladinApiBaseUrl}ItemLookUp.aspx?ttbkey=${aladinApiKey}&itemIdType=ISBN&ItemId=${isbn}&output=js&Cover=Big&Version=20131101&OptResult=ebookList,usedList,cardReviewImgList,ratingInfo,bestSellerRank`;
   
   try {
     const data = await fetchData(aladinApiUrl);
