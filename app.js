@@ -36,57 +36,44 @@ const aladinApiBaseUrl = "https://www.aladin.co.kr/ttb/api/";
   //   ㄴ MyReviewCount :마이리뷰갯수
   // categoryId : //양의정수 - 분야의 고유 번호(기본값:0, 전체) (참고 : 알라딘 모든 분야 카테고리)  
 app.get("/search", async (req, res) => {
-  const {query, start, maxResults, sort, categoryId} = req.query;  
-  // aladinApiUrl = `${aladinApiBaseUrl}ItemSearch.aspx?ttbkey=${aladinApiKey}&Query=${query}&MaxResults=${maxResults}&start=${start}&Sort=${sort}&SearchTarget=Book&output=js&Cover=Big&Version=20131101&CategoryId`;
+  const {query, start, maxResults, sort, categoryId} = req.query;    
   aladinApiUrl = `${aladinApiBaseUrl}ItemSearch.aspx?ttbkey=${aladinApiKey}&Query=${query}&MaxResults=${maxResults}&start=${start}&Sort=${sort}&CategoryId=${categoryId}&SearchTarget=Book&output=js&Cover=Big&Version=20131101`;
   
-
   try {
     const data = await fetchData(aladinApiUrl);
     res.json(data);
-    console.log("req.query",req.query)
-    console.log("aladinApiUrl", aladinApiUrl)
+    // console.log("search data",data)      
+    // console.log("search req.query",req.query)
+    // console.log("search aladinApiUrl", aladinApiUrl)
   } catch (error) {
     res.status(500).json({ error: error.message });
   }    
 });
 
 
-//2 상품리스트 API
-//이슈사항: 파라미터를 넘기면 node에서는 조회되는데 front로 값이 넘어오지 않는다....
 
-//2-1. 상품 리스트 API (베스트셀러)
+//2. 상품 리스트 API
 //ItemList.aspx
   // QueryType 
-  //   ㄴ Bestseller : 베스트셀러  
-app.get("/bestseller", async (req, res) => {
-  const queryType = "Bestseller";
-  const aladinApiUrl = `${aladinApiBaseUrl}ItemList.aspx?ttbkey=${aladinApiKey}&QueryType=${queryType}&MaxResults=50&start=1&SearchTarget=Book&output=js&Cover=Big&CategoryId&Version=20131101`;
-
-  try {
-    const data = await fetchData(aladinApiUrl);
-    res.json(data);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-
-//2-2. 상품 리스트 API (신간전체리스트)
-//ItemList.aspx
-  // QueryType 
-  //   ㄴ ItemNewAll : 신간전체리스트
-app.get("/itemNewAll", async (req, res) => {
-  const queryType = "ItemNewAll";
-  const aladinApiUrl = `${aladinApiBaseUrl}ItemList.aspx?ttbkey=${aladinApiKey}&QueryType=${queryType}&MaxResults=50&start=1&SearchTarget=Book&output=js&Cover=Big&Version=20131101`;  
-
-  try {
-    const data = await fetchData(aladinApiUrl);
-    res.json(data);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
+  //   ㄴ Bestseller : 베스트셀러
+  //   ㄴ ItemNewAll : 신간 전체 리스트
+  //   ㄴ ItemNewSpecial : 주목할 만한 신간 리스트
+  //   ㄴ ItemEditorChoice : 편집자 추천 리스트 (카테고리로만 조회 가능 - 국내도서/음반/외서만 지원)  
+  //   ㄴ BlogBest : 블로거 베스트셀러 (국내도서만 조회 가능)
+  // start : 1이상, 양의 정수(기본값:1)            //검색결과 시작페이지  
+  // MaxResults : 1이상 100이하 양의정수 기본값10  //검색결과 한페이지당 최대 출력개수
+  // CategoryId : 양의정수 - 분야의 고유 번호(기본값:0, 전체) (참고 : 알라딘 모든 분야 카테고리) 특정 분야로 검색결과를 제한함
+  app.get("/ItemList", async (req, res) => {
+    const {listType,start, maxResults, categoryId} = req.query;    
+    const aladinApiUrl = `${aladinApiBaseUrl}ItemList.aspx?ttbkey=${aladinApiKey}&QueryType=${listType}&MaxResults=${maxResults}&start=${start}&SearchTarget=Book&output=js&Cover=Big&CategoryId=${categoryId}&Version=20131101`;
+      
+    try {
+      const data = await fetchData(aladinApiUrl);
+      res.json(data);  
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
 
 
 //3. 상품 조회 API 
@@ -99,7 +86,6 @@ app.get("/detail", async (req, res) => {
   try {
     const data = await fetchData(aladinApiUrl);
     res.json(data);
-    //console.log(data)
   } catch (error) {
     res.status(500).json({ error: error.message });
   }    
@@ -144,6 +130,48 @@ app.use(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+// //2 상품리스트 API
+// //이슈사항: 파라미터를 넘기면 node에서는 조회되는데 front로 값이 넘어오지 않는다....
+
+// //2-1. 상품 리스트 API (베스트셀러)
+// //ItemList.aspx
+//   // QueryType 
+//   //   ㄴ Bestseller : 베스트셀러  
+//   app.get("/bestseller", async (req, res) => {
+//     const queryType = "Bestseller";
+//     const aladinApiUrl = `${aladinApiBaseUrl}ItemList.aspx?ttbkey=${aladinApiKey}&QueryType=${queryType}&MaxResults=50&start=1&SearchTarget=Book&output=js&Cover=Big&CategoryId&Version=20131101`;
+  
+//     try {
+//       const data = await fetchData(aladinApiUrl);
+//       res.json(data);
+//     } catch (error) {
+//       res.status(500).json({ error: error.message });
+//     }
+//   });
+
+
+// //2-2. 상품 리스트 API (신간전체리스트)
+// //ItemList.aspx
+//   // QueryType 
+//   //   ㄴ ItemNewAll : 신간전체리스트
+// app.get("/itemNewAll", async (req, res) => {
+//   const queryType = "ItemNewAll";
+//   const aladinApiUrl = `${aladinApiBaseUrl}ItemList.aspx?ttbkey=${aladinApiKey}&QueryType=${queryType}&MaxResults=50&start=1&SearchTarget=Book&output=js&Cover=Big&Version=20131101`;  
+
+//   try {
+//     const data = await fetchData(aladinApiUrl);
+//     res.json(data);
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// });
+
+
+
+
 
 // //2. 상품 리스트 API
 // //ItemList.aspx
