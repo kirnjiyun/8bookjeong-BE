@@ -18,8 +18,9 @@ app.use(express.json());
 
 //알라딘API관련
 // const aladinApiKey = process.env.REACT_APP_ALADIN_API_KEY;
-const aladinApiKey = "ttbdudgh46512353001";
+// const aladinApiKey = "ttbdudgh46512353001";
 // const aladinApiKey = "ttbredhero88301913001";
+const aladinApiKey = "ttbyoo-n642140001";
 const aladinApiBaseUrl = "https://www.aladin.co.kr/ttb/api/";
 
 
