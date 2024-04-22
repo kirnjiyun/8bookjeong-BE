@@ -20,10 +20,10 @@ app.use(express.json());
 // const aladinApiKey = process.env.REACT_APP_ALADIN_API_KEY;
 // const aladinApiKey = "ttbdudgh46512353001";
 // const aladinApiKey = "ttbredhero88301913001";
-
 // const aladinApiKey = "ttbyoo-n642140001";   //20240421 적용했는데 잘되는거
+// const aladinApiKey = "ttbjjari910105001"; //발표 바로전 적용
 
-const aladinApiKey = "ttbjjari910105001"; //발표 바로전 적용
+const aladinApiKey = "ttbdudgh46512353001";
 const aladinApiBaseUrl = "https://www.aladin.co.kr/ttb/api/";
 
 
