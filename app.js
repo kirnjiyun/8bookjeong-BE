@@ -4,11 +4,24 @@ const cors = require("cors");
 const morgan = require("morgan");
 const axios = require("axios");
 const app = express();
-const port = 8080;
+const PORT = 8080;
 require("dotenv").config();
 app.use(compression());
 app.use(morgan("dev"));
-app.use(cors({ origin: true, credentials: true }));
+app.use(
+    cors({
+        origin: [
+            "https://port-0-palbookjeong-m0gfqqcie9ac94ea.sel4.cloudtype.app",
+            "https://palbookjeong.netlify.app",
+            "http://localhost:3000",
+            "http://localhost:8080",
+        ],
+        methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+        preflightContinue: false,
+        optionsSuccessStatus: 204,
+        credentials: true,
+    })
+);
 app.use(express.json());
 
 const aladinApiKey = "ttbkimjiyunee2257001";
@@ -80,8 +93,8 @@ app.get("/detail", async (req, res) => {
     }
 });
 
-app.listen(port, () => {
-    console.log(`Listening on port ${port}...`);
+app.listen(PORT, () => {
+    console.log(`Listening on PORT ${PORT}...`);
 });
 
 const fetchData = async (url, headers = {}) => {
